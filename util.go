@@ -2,7 +2,6 @@ package logger
 
 import (
 	"fmt"
-	"os"
 	"path"
 	"runtime"
 	"time"
@@ -20,7 +19,7 @@ func GetLineInfo() (string, string, int) {
 	return "", "", 0
 }
 
-func WriteLog(file *os.File, level int, format string, args ...interface{}) {
+func WriteLog(level int, format string, args ...interface{}) *LogData {
 
 	now := time.Now()
 
@@ -38,5 +37,19 @@ func WriteLog(file *os.File, level int, format string, args ...interface{}) {
 	// 格式用户输入的内容
 	msg := fmt.Sprintf(format, args...)
 
-	fmt.Fprintf(file, "%s %s %s:%s:%d %s \n", timeStr, levelText, fileName, funcName, line, msg)
+	warnAndFatal := false
+
+	if level == LogLevelWarn || level == LogLevelError || level == LogLevelFail {
+		warnAndFatal = true
+	}
+
+	return &LogData{
+		Message:      msg,
+		TimeStr:      timeStr,
+		LevelStr:     levelText,
+		FileName:     fileName,
+		FuncName:     funcName,
+		LineNo:       line,
+		WarnAndFatal: warnAndFatal,
+	}
 }

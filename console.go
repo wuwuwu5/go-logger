@@ -63,7 +63,9 @@ func (this *ConsoleLogger) Debug(format string, args ...interface{}) {
 		return
 	}
 
-	WriteLog(os.Stdout, LogLevelDebug, format, args...)
+	logData := WriteLog(LogLevelDebug, format, args...)
+
+	this.console(logData)
 }
 
 func (this *ConsoleLogger) Trace(format string, args ...interface{}) {
@@ -71,8 +73,9 @@ func (this *ConsoleLogger) Trace(format string, args ...interface{}) {
 		return
 	}
 
-	WriteLog(os.Stdout, LogLevelTrace, format, args...)
+	logData := WriteLog(LogLevelTrace, format, args...)
 
+	this.console(logData)
 }
 
 func (this *ConsoleLogger) Info(format string, args ...interface{}) {
@@ -80,8 +83,9 @@ func (this *ConsoleLogger) Info(format string, args ...interface{}) {
 		return
 	}
 
-	WriteLog(os.Stdout, LogLevelInfo, format, args...)
+	logData := WriteLog(LogLevelInfo, format, args...)
 
+	this.console(logData)
 }
 
 func (this *ConsoleLogger) Warn(format string, args ...interface{}) {
@@ -89,8 +93,9 @@ func (this *ConsoleLogger) Warn(format string, args ...interface{}) {
 		return
 	}
 
-	WriteLog(os.Stdout, LogLevelWarn, format, args...)
+	logData := WriteLog(LogLevelWarn, format, args...)
 
+	this.console(logData)
 }
 
 func (this *ConsoleLogger) Error(format string, args ...interface{}) {
@@ -98,8 +103,9 @@ func (this *ConsoleLogger) Error(format string, args ...interface{}) {
 		return
 	}
 
-	WriteLog(os.Stdout, LogLevelError, format, args...)
+	logData := WriteLog(LogLevelError, format, args...)
 
+	this.console(logData)
 }
 
 func (this *ConsoleLogger) Fatal(format string, args ...interface{}) {
@@ -107,7 +113,13 @@ func (this *ConsoleLogger) Fatal(format string, args ...interface{}) {
 		return
 	}
 
-	WriteLog(os.Stdout, LogLevelFail, format, args...)
+	logData := WriteLog(LogLevelFail, format, args...)
+
+	this.console(logData)
+}
+
+func (this *ConsoleLogger) console(logData *LogData) {
+	fmt.Fprintf(os.Stdout, "%s %s %s:%d %s %s\n", logData.TimeStr, logData.LevelStr, logData.FileName, logData.LineNo, logData.FuncName, logData.Message)
 }
 
 func (this *ConsoleLogger) Close() {

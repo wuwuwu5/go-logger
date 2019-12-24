@@ -1,5 +1,6 @@
 package logger
 
+// 日志级别
 const (
 	LogLevelDebug = iota
 	LogLevelTrace
@@ -7,6 +8,12 @@ const (
 	LogLevelWarn
 	LogLevelError
 	LogLevelFail
+)
+
+// 日志分割方式
+const (
+	LogSplitTypeDate = iota // 日期分割
+	LogSplitTypeSize        // 大小分割
 )
 
 func getLevelText(level int) string {
@@ -27,7 +34,6 @@ func getLevelText(level int) string {
 		return "DEBUG"
 	}
 }
-
 
 func getLevel(level string) int {
 	switch level {
